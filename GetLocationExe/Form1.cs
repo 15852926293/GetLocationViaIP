@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -26,7 +27,7 @@ namespace GetLocationExe
         public static string GetExtenalIpAddress()
         {
             String url = "http://hijoyusers.joymeng.com:8100/test/getNameByOtherIp";
-            string IP = "未获取到外网ip";
+            string IP = "";
             try
             {
                 //从网址中获取本机ip数据    
@@ -40,7 +41,7 @@ namespace GetLocationExe
             }
             catch (Exception)
             {
-                MessageBox.Show("未获取到ip!");
+                MessageBox.Show("Get this PC's IP failed !", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             return IP;
@@ -50,8 +51,17 @@ namespace GetLocationExe
         {
             string strURL = "http://www.freegeoip.net/xml/" + ip;   //网址URL
             //通过GetElementsByTagName获取标签结点集合
-            XmlDocument doc = new XmlDocument();                     //Xml文档
-            doc.Load(strURL);                                        //加载strURL指定XML数据
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                //Xml文档
+                doc.Load(strURL);
+            }
+            catch
+            {
+                MessageBox.Show("Illegal IP！");
+            }
+            //加载strURL指定XML数据
             XmlNodeList nodeLstCity = doc.GetElementsByTagName("City"); //获取标签
             //通过SelectSingleNode匹配匹配第一个节点
             XmlNode root = doc.SelectSingleNode("Response");
@@ -63,29 +73,52 @@ namespace GetLocationExe
             }
             if (CountryName == "" && RegionName == "" && City == "")
             {
-                MessageBox.Show("未查询到相应信息！");
+                MessageBox.Show("Locate your IP failed !", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            textBox2.Text = "国家名称: " + CountryName + "\r\n\r\n区域名称: " + RegionName + "\r\n\r\n城市名称: " + City;
+            textBox2.Text = "Country:  " + CountryName + "\r\n\r\nProvince: " + RegionName + "\r\n\r\nCity:     " + City;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             ip = textBox1.Text;
-            showLocation(ip);
+            IPAddress ipStr;
+            if (IPAddress.TryParse(ip, out ipStr))
+            {
+                showLocation(ip);
+            }
+            else
+            {
+                MessageBox.Show("Illegal IP !","Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textBox1.Text = "";
+                textBox2.Text = "";
+
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             ip = GetExtenalIpAddress();
-            textBox1.Text = ip;
-            showLocation(ip);
+            if (ip == "")
+            {
+                MessageBox.Show("Can't get this PC's IP !", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                textBox1.Text = ip;
+                showLocation(ip);
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             textBox1.Text = "";
             textBox2.Text = "";
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            label1.Text = DateTime.Now.ToString(("yyyy-MM-dd HH:mm"));
         }
     }
 }

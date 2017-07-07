@@ -7,3 +7,12 @@ C:\Users\admin\Desktop\Git-Project\GetLocationExe\GetLocationExe\bin\Debug\GetLo
 C:\Users\admin\Desktop\Git-Project\GetLocationExe\GetLocationExe\bin\Debug\GetLocationExe.pdb
 C:\Users\admin\Desktop\Git-Project\GetLocationExe\GetLocationExe\obj\Debug\GetLocationExe.exe
 C:\Users\admin\Desktop\Git-Project\GetLocationExe\GetLocationExe\obj\Debug\GetLocationExe.pdb
+C:\Users\admin\Desktop\Git-Project\GetLocationViaIP\GetLocationExe\bin\Debug\GetLocationExe.exe.config
+C:\Users\admin\Desktop\Git-Project\GetLocationViaIP\GetLocationExe\obj\Debug\GetLocationExe.exe
+C:\Users\admin\Desktop\Git-Project\GetLocationViaIP\GetLocationExe\obj\Debug\GetLocationExe.pdb
+C:\Users\admin\Desktop\Git-Project\GetLocationViaIP\GetLocationExe\bin\Debug\GetLocationExe.exe
+C:\Users\admin\Desktop\Git-Project\GetLocationViaIP\GetLocationExe\bin\Debug\GetLocationExe.pdb
+C:\Users\admin\Desktop\Git-Project\GetLocationViaIP\GetLocationExe\obj\Debug\GetLocationExe.csprojResolveAssemblyReference.cache
+C:\Users\admin\Desktop\Git-Project\GetLocationViaIP\GetLocationExe\obj\Debug\GetLocationExe.Form1.resources
+C:\Users\admin\Desktop\Git-Project\GetLocationViaIP\GetLocationExe\obj\Debug\GetLocationExe.Properties.Resources.resources
+C:\Users\admin\Desktop\Git-Project\GetLocationViaIP\GetLocationExe\obj\Debug\GetLocationExe.csproj.GenerateResource.Cache
