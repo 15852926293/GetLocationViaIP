@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,9 +16,10 @@ namespace GetLocationExe
     public partial class Form1 : Form
     {
         public string ip = "";
+        public string URLorIP = "";
         public string CountryName = "";
         public string RegionName = "";
-        public string City = "";
+        public string CityName = "";
 
         public Form1()
         {
@@ -47,6 +49,21 @@ namespace GetLocationExe
             return IP;
         }
 
+        public static string URLToIP(string URL)
+        {
+            string URLIP = "";
+            try
+            {
+                IPAddress[] addres = Dns.GetHostAddresses(URL);
+                URLIP = addres[0].ToString();
+            }
+            catch
+            {
+                MessageBox.Show("IP/URL resolution failed!", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            return URLIP;
+        }
+
         private void showLocation(string ip)
         {
             string strURL = "http://www.freegeoip.net/xml/" + ip;   //网址URL
@@ -59,7 +76,7 @@ namespace GetLocationExe
             }
             catch
             {
-                MessageBox.Show("Illegal IP！");
+                MessageBox.Show("Illegal IP！", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             //加载strURL指定XML数据
             XmlNodeList nodeLstCity = doc.GetElementsByTagName("City"); //获取标签
@@ -69,30 +86,36 @@ namespace GetLocationExe
             {
                 CountryName = (root.SelectSingleNode("CountryName")).InnerText;
                 RegionName = (root.SelectSingleNode("RegionName")).InnerText;
-                City = (root.SelectSingleNode("City")).InnerText;
+                CityName = (root.SelectSingleNode("City")).InnerText;
             }
-            if (CountryName == "" && RegionName == "" && City == "")
+            if (CountryName == "" && RegionName == "" && CityName == "")
             {
                 MessageBox.Show("Locate your IP failed !", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            textBox2.Text = "Country:  " + CountryName + "\r\n\r\nProvince: " + RegionName + "\r\n\r\nCity:     " + City;
+            textBox2.Text = "Country:  " + CountryName + "\r\n\r\nProvince: " + RegionName + "\r\n\r\nCity:     " + CityName;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ip = textBox1.Text;
-            IPAddress ipStr;
-            if (IPAddress.TryParse(ip, out ipStr))
+            if (!textBox1.Text.Contains('.'))
             {
+                MessageBox.Show("Please enter IP/URL correctly!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            URLorIP = textBox1.Text;
+            ip = URLToIP(URLorIP);
+            if (ip != "")
+            {
+                textBox1.Text = ip;
                 showLocation(ip);
             }
             else
             {
-                MessageBox.Show("Illegal IP !","Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBox1.Text = "";
                 textBox2.Text = "";
-
+                ip = "";
+                URLorIP = "";
             }
         }
 
@@ -114,6 +137,8 @@ namespace GetLocationExe
         {
             textBox1.Text = "";
             textBox2.Text = "";
+            ip = "";
+            URLorIP = "";
         }
 
         private void timer1_Tick(object sender, EventArgs e)
