@@ -98,10 +98,10 @@ namespace GetLocationExe
         {
             FileStream fs = null;
             
-            string URLotIPToSave = URLorIP == "" ? ip : URLorIP;
+            string URLorIPToSave = URLorIP == "" ? ip : URLorIP;
             string RegionToSave = RegionName == "" ? "unknow" : RegionName;
             string CityToSave = CityName == "" ? "unknow" : CityName;
-            string recored = DateTime.Now.ToString() + "|" + URLotIPToSave + "|" + CountryName + "|" + RegionToSave + "|" + CityToSave + "\r\n";
+            string recored = DateTime.Now.ToString() + "|" + URLorIPToSave + "|" + CountryName + "|" + RegionToSave + "|" + CityToSave + "\r\n";
             Encoding encoder = Encoding.UTF8;
             byte[] bytes = encoder.GetBytes(recored);
             try
@@ -140,9 +140,9 @@ namespace GetLocationExe
             {
                 textBox1.Text = "";
                 textBox2.Text = "";
-                ip = "";
-                URLorIP = "";
             }
+            ip = "";
+            URLorIP = "";
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -157,6 +157,8 @@ namespace GetLocationExe
                 textBox1.Text = ip;
                 showLocation(ip);
             }
+            ip = "";
+            URLorIP = "";
         }
 
         private void button3_Click(object sender, EventArgs e)
