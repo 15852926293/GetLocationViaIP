@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -28,16 +29,13 @@ namespace GetLocationExe
 
         public static string GetExtenalIpAddress()
         {
-            String url = "http://hijoyusers.joymeng.com:8100/test/getNameByOtherIp";
             string IP = "";
             try
             {
-                //从网址中获取本机ip数据    
                 System.Net.WebClient client = new System.Net.WebClient();
                 client.Encoding = System.Text.Encoding.Default;
-                string str = client.DownloadString(url);
+                string str = client.DownloadString(GlobalConfig.GetExtenalIpURL);
                 client.Dispose();
-
                 if (!str.Equals(""))
                     IP = str;
             }
@@ -66,21 +64,20 @@ namespace GetLocationExe
 
         private void showLocation(string ip)
         {
-            string strURL = "http://www.freegeoip.net/xml/" + ip;   //网址URL
-            //通过GetElementsByTagName获取标签结点集合
+            string strURL = GlobalConfig.IPLocateURL + ip;   //IP Locate URL
             XmlDocument doc = new XmlDocument();
             try
             {
-                //Xml文档
+                //Get Xml info 
                 doc.Load(strURL);
             }
             catch
             {
                 MessageBox.Show("Illegal IP！", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            //加载strURL指定XML数据
-            XmlNodeList nodeLstCity = doc.GetElementsByTagName("City"); //获取标签
-            //通过SelectSingleNode匹配匹配第一个节点
+            //Load strURL XML data
+            XmlNodeList nodeLstCity = doc.GetElementsByTagName("City"); //Get the tag
+            //Using SelectSingleNode match the first node 
             XmlNode root = doc.SelectSingleNode("Response");
             if (root != null)
             {
@@ -94,6 +91,35 @@ namespace GetLocationExe
                 return;
             }
             textBox2.Text = "Country:  " + CountryName + "\r\n\r\nProvince: " + RegionName + "\r\n\r\nCity:     " + CityName;
+            SaveToFile();
+        }
+
+        private void SaveToFile()
+        {
+            FileStream fs = null;
+            
+            string URLotIPToSave = URLorIP == "" ? ip : URLorIP;
+            string RegionToSave = RegionName == "" ? "unknow" : RegionName;
+            string CityToSave = CityName == "" ? "unknow" : CityName;
+            string recored = DateTime.Now.ToString() + "|" + URLotIPToSave + "|" + CountryName + "|" + RegionToSave + "|" + CityToSave + "\r\n";
+            Encoding encoder = Encoding.UTF8;
+            byte[] bytes = encoder.GetBytes(recored);
+            try
+            {
+                fs = File.OpenWrite(GlobalConfig.filePath);
+                //Append to the history file.
+                fs.Position = fs.Length;
+                fs.Write(bytes, 0, bytes.Length);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Open recored file failed!", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            finally
+            {
+                fs.Close();
+            }
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -139,6 +165,13 @@ namespace GetLocationExe
             textBox2.Text = "";
             ip = "";
             URLorIP = "";
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Form2 f2 = new Form2();
+            f2.Show();
+            f2.ShowData();
         }
 
         private void timer1_Tick(object sender, EventArgs e)

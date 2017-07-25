@@ -16,3 +16,4 @@ C:\Users\admin\Desktop\Git-Project\GetLocationViaIP\GetLocationExe\obj\Debug\Get
 C:\Users\admin\Desktop\Git-Project\GetLocationViaIP\GetLocationExe\obj\Debug\GetLocationExe.Form1.resources
 C:\Users\admin\Desktop\Git-Project\GetLocationViaIP\GetLocationExe\obj\Debug\GetLocationExe.Properties.Resources.resources
 C:\Users\admin\Desktop\Git-Project\GetLocationViaIP\GetLocationExe\obj\Debug\GetLocationExe.csproj.GenerateResource.Cache
+C:\Users\admin\Desktop\Git-Project\GetLocationViaIP\GetLocationExe\obj\Debug\GetLocationExe.Form2.resources
